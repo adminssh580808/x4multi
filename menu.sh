@@ -10,20 +10,28 @@ CYAN="\e[036;1m"
 LIGHT="\e[037;1m"
 NC="\e[0m"
 
-# NGINX
-nginx=$( systemctl status nginx | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
+# CRON
+nginx=$( systemctl status cron | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
 if [[ $nginx == "running" ]]; then
     BCD1="${GREEN}ON${NC}"
 else
     BCD1="${RED}OFF${NC}"
 fi
 
-# XRAY
-xray=$( systemctl status xray@tls | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
-if [[ $xray == "running" ]]; then
+# NGINX
+nginx=$( systemctl status nginx | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
+if [[ $nginx == "running" ]]; then
     BCD2="${GREEN}ON${NC}"
 else
     BCD2="${RED}OFF${NC}"
+fi
+
+# XRAY
+xray=$( systemctl status xray@tls | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
+if [[ $xray == "running" ]]; then
+    BCD3="${GREEN}ON${NC}"
+else
+    BCD3="${RED}OFF${NC}"
 fi
 
 echo -e " ${YELLOW} ----------=[${NC} ${RED}PREMIUM PANEL MENU${NC} ${YELLOW}]=---------- ${NC}"
@@ -45,16 +53,16 @@ echo -e "          ${GREEN} DAY      :${NC}${LIGHT} ${HARI} ${NC}"
 echo -e "          ${GREEN} DATE     :${NC}${LIGHT} ${TGL} ${NC}"
 echo -e "          ${GREEN} TIME     :${NC}${LIGHT} ${JAM} ${NC}"
 echo -e " ${YELLOW} -------------------------------------------- ${NC}"
-echo -e " ${YELLOW}           ${LIGHT}NGINX =${NC} ${BCD1}      ${LIGHT}XRAY =${NC} ${BCD2}        "
+echo -e " ${YELLOW} ${LIGHT}  CRON =${NC} $BCD1     ${LIGHT} NGINX =${NC} $BCD2     ${LIGHT} XRAY =${NC} $BCD3  "
 echo -e " ${YELLOW} -------------------------------------------- ${NC}"
 echo -e "    ${GREEN} 1${NC}${LIGHT}). PANEL SHADOWSOCKS${NC}"
 echo -e "    ${GREEN} 2${NC}${LIGHT}). PANEL TROJAN${NC}"
 echo -e "    ${GREEN} 3${NC}${LIGHT}). PANEL VLESS${NC}"
 echo -e "    ${GREEN} 4${NC}${LIGHT}). PANEL VMESS${NC}"
-echo -e "    ${GREEN} 5${NC}${LIGHT}). ADD NEW HOST${NC}"
+echo -e "    ${GREEN} 5${NC}${LIGHT}). ADD SUBDOMAIN${NC}"
 echo -e "    ${GREEN} 6${NC}${LIGHT}). RENEW CERT XRAY${NC}"
 echo -e "   ${GREEN}  7${NC}${LIGHT}). CHECK USAGE RAM${NC}"
-echo -e "   ${GREEN}  8${NC}${LIGHT}). CHECK BANDWIDTH VPS${NC}"
+echo -e "   ${GREEN}  8${NC}${LIGHT}). CHECK BANDWIDTH SYSTEM${NC}"
 echo -e "   ${GREEN}  9${NC}${LIGHT}). SPEEDTEST VPS${NC}"
 echo -e "   ${GREEN} 10${NC}${LIGHT}). INFO RUNNING SYSTEM${NC}" 
 echo -e "   ${GREEN} 11${NC}${LIGHT}). INFO SCRIPT${NC}"
