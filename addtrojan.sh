@@ -66,7 +66,7 @@ cat /etc/xray/config/xray/tls.json | jq '.inbounds[4].settings.clients += [{"pas
 echo -e "Trojan $username $exp $uuid" >>/etc/xray/trojan-client.conf
 
 # // Make Configruation Link
-grpc_link="trojan://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&type=grpc&serviceName=Trojan-GRPC#${username}"
+grpc_link="trojan://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&type=grpc&serviceName=trojan-grpc#${username}"
 tcp_tls_link="trojan://${uuid}@${domain}:${tls_port}?security=tls&headerType=none&type=tcp#${username}"
 ws_tls_link="trojan://${uuid}@${domain}:${tls_port}?path=%2Ftrojan&security=tls&type=ws#${username}"
 
@@ -84,7 +84,7 @@ echo -e " Address     : ${domain}"
 echo -e " Port        : ${tls_port}"
 echo -e " Password    : ${uuid}"
 echo -e " Path WS     : /trojan"
-echo -e " ServiceName : Trojan-GRPC"
+echo -e " ServiceName : trojan-grpc"
 echo -e " Expired On  : ${exp}"
 echo -e "==============================="
 echo -e " TROJAN TCP TLS LINK :"
