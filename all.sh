@@ -292,7 +292,7 @@ cat /etc/xray/config/xray/tls.json | jq '.inbounds[4].settings.clients += [{"pas
 echo -e "Trojan $username $exp $uuid" >>/etc/xray/trojan-client.conf
 
 # // Make Configruation Link
-tgrpc_link="trojan://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&type=grpc&serviceName=Trojan-GRPC#${username}"
+tgrpc_link="trojan://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&type=grpc&serviceName=trojan-grpc#${username}"
 ttcp_tls_link="trojan://${uuid}@${domain}:${tls_port}?security=tls&headerType=none&type=tcp#${username}"
 tws_tls_link="trojan://${uuid}@${domain}:${tls_port}?path=%2Ftrojan&security=tls&type=ws#${username}"
 
@@ -305,7 +305,7 @@ echo -e "Vless $username $exp $uuid" >>/etc/xray/vless-client.conf
 # // Vless Link
 vless_nontls="vless://${uuid}@${domain}:${nontls_port}?path=%2Fvless&security=none&encryption=none&type=ws#${username}"
 vless_tls="vless://${uuid}@${domain}:${tls_port}?path=%2Fvless&security=tls&encryption=none&type=ws#${username}"
-vless_grpc="vless://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&encryption=none&type=grpc&serviceName=Vless-GRPC#${username}"
+vless_grpc="vless://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&encryption=none&type=grpc&serviceName=vless-grpc#${username}"
 
 # // Input Your Data to server
 cat /etc/xray/config/xray/tls.json | jq '.inbounds[2].settings.clients += [{"id": "'${uuid}'","email": "'${username}'","alterid": '"0"'}]' >/etc/xray/config/xray/tls.json.tmp && mv /etc/xray/config/xray/tls.json.tmp /etc/xray/config/xray/tls.json
@@ -314,7 +314,7 @@ cat /etc/xray/config/xray/nontls.json | jq '.inbounds[0].settings.clients += [{"
 echo -e "Vmess $username $exp $uuid" >>/etc/xray/vmess-client.conf
 
 cat >/etc/xray/xray-cache/vmess-tls-gun-$username.json <<END
-{"add":"${domain}","aid":"0","host":"","id":"${uuid}","net":"grpc","path":"Vmess-GRPC","port":"${tls_port}","ps":"${username}","scy":"none","sni":"","tls":"tls","type":"gun","v":"2"}
+{"add":"${domain}","aid":"0","host":"","id":"${uuid}","net":"grpc","path":"vmess-grpc","port":"${tls_port}","ps":"${username}","scy":"none","sni":"","tls":"tls","type":"gun","v":"2"}
 END
 
 cat >/etc/xray/xray-cache/vmess-tls-ws-$username.json <<END
@@ -349,11 +349,11 @@ echo -e " Password / UUID  : ${uuid}"
 echo -e " Path SS WS       : /ss-ws"
 echo -e " ServiceName GRPC : ss-grpc"
 echo -e " Path Trojan WS   : /trojan"
-echo -e " ServiceName GRPC : Trojan-GRPC"
+echo -e " ServiceName GRPC : trojan-grpc"
 echo -e " Path Vless WS    : /vless"
-echo -e " ServiceName GRPC : Vless-GRPC"
+echo -e " ServiceName GRPC : vless-grpc"
 echo -e " Path Vmess WS    : /vmess"
-echo -e " ServiceName GRPC : Vmess-GRPC"
+echo -e " ServiceName GRPC : vmess-grpc"
 echo -e " Expired On       : ${exp}"
 echo -e "========================================="
 echo -e " SHADOWSOCKS GRPC LINK :"
