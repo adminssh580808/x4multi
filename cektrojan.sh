@@ -2,7 +2,7 @@
 clear
 
 echo -n > /tmp/other.txt
-data=( `cat /etc/xray/trojan-client.conf | grep '^#!' | cut -d ' ' -f 2 | sort | uniq`);
+data=( `cat /etc/xray/config/xray/tls.json | grep '^#!' | cut -d ' ' -f 2 | sort | uniq`);
 
 for akun in "${data[@]}"
 do
