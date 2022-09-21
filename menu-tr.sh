@@ -173,10 +173,10 @@ clear
 
 # // Successfull
 echo -e "${OKEY} User ( ${YELLOW}${client}${NC} ) Renewed Then Expired On ( ${YELLOW}$exp4${NC} )"
-}
 
 clear
 echo -e "${OKEY} Username ( ${YELLOW}$client${NC} ) Has Been Removed !"
+}
 
 echo -e ""
 echo -e " ${YELLOW} ----------------=[${NC} ${RED}PANEL XRAY TROJAN${NC} ${YELLOW}]=---------------- ${NC}"
