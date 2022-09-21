@@ -194,6 +194,6 @@ exit
 bash
 ;;
 *)
-echo " Please enter the correct number!!!"
+menu
 ;;
 esac
