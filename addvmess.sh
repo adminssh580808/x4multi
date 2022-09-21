@@ -66,7 +66,7 @@ cat /etc/xray/config/xray/nontls.json | jq '.inbounds[0].settings.clients += [{"
 echo -e "Vmess $username $exp $uuid" >>/etc/xray/vmess-client.conf
 
 cat >/etc/xray/xray-cache/vmess-tls-gun-$username.json <<END
-{"add":"${domain}","aid":"0","host":"","id":"${uuid}","net":"grpc","path":"Vmess-GRPC","port":"${tls_port}","ps":"${username}","scy":"none","sni":"","tls":"tls","type":"gun","v":"2"}
+{"add":"${domain}","aid":"0","host":"","id":"${uuid}","net":"grpc","path":"vmess-grpc","port":"${tls_port}","ps":"${username}","scy":"none","sni":"","tls":"tls","type":"gun","v":"2"}
 END
 
 cat >/etc/xray/xray-cache/vmess-tls-ws-$username.json <<END
@@ -98,7 +98,7 @@ echo -e " Port TLS    : ${tls_port}"
 echo -e " Port NonTLS : ${nontls_port}"
 echo -e " UUID        : ${uuid}"
 echo -e " Path WS     : /vmess"
-echo -e " ServiceName : Vmess-GRPC"
+echo -e " ServiceName : vmess-grpc"
 echo -e " Expired On  : ${exp}"
 echo -e "==============================="
 echo -e " VMESS WS TLS LINK :"
