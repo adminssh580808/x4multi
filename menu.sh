@@ -12,7 +12,7 @@ NC="\e[0m"
 
 echo -e ""
 echo -e ""
-echo -e "  ${YELLOW}------=[${NC} ${RED}AUTO SCRIPT PREMIUM BY SSHINJECTOR.NET${NC} ${YELLOW}]=------ ${NC}"
+echo -e " ${YELLOW} --------=[${NC} ${RED}PANEL MENU BY SSHINJECTOR.NET${NC} ${YELLOW}]=------- ${NC}"
 DOMAIN=$(cat /etc/xray/domain.conf)
 ISP=$(curl -s ipinfo.io/org | cut -d " " -f 2-10 )
 CITY=$(curl -s ipinfo.io/city )
@@ -21,7 +21,7 @@ IP=$(curl -s ipinfo.io/ip )
 JAM=$(date +"%T")
 HARI=$(date +"%A")
 TGL=$(date +"%d-%B-%Y")
-echo -e ""
+echo -e " ${YELLOW}          ------------------------------------------- ${NC}"
 echo -e "          ${GREEN} ISP NAME :${NC}${LIGHT} ${ISP} ${NC}"
 echo -e "          ${GREEN} DOMAIN   :${NC}${LIGHT} ${DOMAIN} ${NC}"
 echo -e "          ${GREEN} IP VPS   :${NC}${LIGHT} ${IP} ${NC}"
@@ -30,14 +30,14 @@ echo -e "          ${GREEN} DATE     :${NC}${LIGHT} ${TGL} ${NC}"
 echo -e "          ${GREEN} TIME     :${NC}${LIGHT} ${JAM} ${NC}"
 echo -e "          ${GREEN} CITY     :${NC}${LIGHT} ${CITY} ${NC}"
 echo -e "          ${GREEN} TIMEZONE :${NC}${LIGHT} ${WKT} ${NC}"
-echo -e ""
-echo -e " ${YELLOW} -------------------=[${NC} ${RED}XRAY SERVICE${NC} ${YELLOW}]=------------------- ${NC}"
+echo -e " ${YELLOW}          ------------------------------------------- ${NC}"
+echo -e " ${YELLOW} -----------------=[${NC} ${RED}XRAY SERVICE${NC} ${YELLOW}]=--------------- ${NC}"
 echo -e "    ${GREEN} 1${NC}${LIGHT})${NC} ${LIGHT}PANEL SHADOWSOCKS${NC}"
 echo -e "    ${GREEN} 2${NC}${LIGHT})${NC} ${LIGHT}PANEL TROJAN${NC}"
 echo -e "    ${GREEN} 3${NC}${LIGHT})${NC} ${LIGHT}PANEL VLESS${NC}"
 echo -e "    ${GREEN} 4${NC}${LIGHT})${NC} ${LIGHT}PANEL VMESS${NC}"
 echo -e ""
-echo -e " ${YELLOW} -------------------=[${NC} ${RED}OPTIONS MENU${NC} ${YELLOW}]=------------------- ${NC}"
+echo -e " ${YELLOW} -----------------=[${NC} ${RED}OPTIONS MENU${NC} ${YELLOW}]=--------------- ${NC}"
 echo -e "    ${GREEN} 5${NC}${LIGHT})${NC} ${LIGHT}ADD NEW HOST${NC}"
 echo -e "    ${GREEN} 6${NC}${LIGHT})${NC} ${LIGHT}RENEW CERT XRAY${NC}"
 echo -e "   ${GREEN}  7${NC}${LIGHT})${NC} ${LIGHT}CHECK USAGE RAM${NC}"
@@ -46,9 +46,9 @@ echo -e "   ${GREEN}  9${NC}${LIGHT})${NC} ${LIGHT}SPEEDTEST VPS${NC}"
 echo -e "   ${GREEN} 10${NC}${LIGHT})${NC} ${LIGHT}INFO RUNNING SYSTEM${NC}" 
 echo -e "   ${GREEN} 11${NC}${LIGHT})${NC} ${LIGHT}INFO SCRIPT${NC}"
 echo -e "   ${GREEN} 12${NC}${LIGHT})${NC} ${LIGHT}REBOOT VPS${NC}"
-echo -e " ${YELLOW} -------------------------------------------------------- ${NC}"
+echo -e " ${YELLOW} --------------------------------------------------- ${NC}"
 echo -e "       ${GREEN} x${NC}${LIGHT})${NC} ${LIGHT}EXIT${NC}"
-echo -e " ${YELLOW} -------------------------------------------------------- ${NC}"
+echo -e " ${YELLOW} ---------------------------------------------------- ${NC}"
 echo -e ""
 echo -e "    ${LIGHT} Select From Options ${NC}"
 read -p "     [1-18 or type x to exit the menu] : " menuu
