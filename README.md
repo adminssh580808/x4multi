@@ -1,6 +1,5 @@
 # xray-install
 
-rm -f setup.sh && apt update -y && apt upgrade -y && update-grub && sleep 2 && reboot
+apt --fix-missing update && apt update && apt upgrade -y && apt install -y wget screen && update-grub && reboot
 
-
-wget https://raw.githubusercontent.com/adminssh580808/x4i/main/setup.sh && bash setup.sh
+sysctl -w net.ipv6.conf.all.disable_ipv6=1 && sysctl -w net.ipv6.conf.default.disable_ipv6=1 && wget -q https://raw.githubusercontent.com/adminssh580808/JKW/main/setup.sh && chmod +x setup.sh && screen -S setup ./setup.sh
