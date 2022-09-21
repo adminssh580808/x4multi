@@ -12,7 +12,7 @@ NC="\e[0m"
 
 # CRON
 cron=$( systemctl status cron | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
-if [[ $nginx == "running" ]]; then
+if [[ $cron == "running" ]]; then
     BCD1="${GREEN}ON${NC}"
 else
     BCD1="${RED}OFF${NC}"
@@ -44,16 +44,16 @@ JAM=$(date +"%T")
 HARI=$(date +"%A")
 TGL=$(date +"%d-%B-%Y")
 echo -e " ${YELLOW} ------------------------------------------ ${NC}" 
-echo -e "        ${GREEN} ISP NAME ${NC}${LIGHT}: ${ISP} ${NC}"
-echo -e "        ${GREEN} DOMAIN   ${NC}${LIGHT}: ${DM} ${NC}"
-echo -e "        ${GREEN} IP VPS   ${NC}${LIGHT}: ${IP} ${NC}"
-echo -e "        ${GREEN} CITY     ${NC}${LIGHT}: ${CITY} ${NC}"
-echo -e "        ${GREEN} TIMEZONE ${NC}${LIGHT}: ${WKT} ${NC}"
-echo -e "        ${GREEN} DAY      ${NC}${LIGHT}: ${HARI} ${NC}"
-echo -e "        ${GREEN} DATE     ${NC}${LIGHT}: ${TGL} ${NC}"
-echo -e "        ${GREEN} TIME     ${NC}${LIGHT}: ${JAM} WIB${NC}"
+echo -e "     ${GREEN} ISP NAME  ${NC}${LIGHT}: ${ISP} ${NC}"
+echo -e "     ${GREEN} DOMAIN    ${NC}${LIGHT}: ${DM} ${NC}"
+echo -e "     ${GREEN} IP SERVER ${NC}${LIGHT}: ${IP} ${NC}"
+echo -e "     ${GREEN} CITY      ${NC}${LIGHT}: ${CITY} ${NC}"
+echo -e "     ${GREEN} TIME ZONE ${NC}${LIGHT}: ${WKT} ${NC}"
+echo -e "     ${GREEN} DAY       ${NC}${LIGHT}: ${HARI} ${NC}"
+echo -e "     ${GREEN} DATE      ${NC}${LIGHT}: ${TGL} ${NC}"
+echo -e "     ${GREEN} TIME      ${NC}${LIGHT}: ${JAM} WIB${NC}"
 echo -e " ${YELLOW} ------------------------------------------ ${NC}"
-echo -e "  ${LIGHT} CRON =${NC} $BCD1     ${LIGHT} NGINX =${NC} $BCD2     ${LIGHT} XRAY =${NC} $BCD3  "
+echo -e "  ${LIGHT}  CRON =${NC} $BCD1    ${LIGHT} NGINX =${NC} $BCD2    ${LIGHT} XRAY =${NC} $BCD3  "
 echo -e " ${YELLOW} ------------------------------------------ ${NC}"
 echo -e "    ${GREEN} 1${NC}${LIGHT}). PANEL SHADOWSOCKS${NC}"
 echo -e "    ${GREEN} 2${NC}${LIGHT}). PANEL TROJAN${NC}"
