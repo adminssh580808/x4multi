@@ -275,6 +275,7 @@ cat > /home/vps/public_html/ss-grpc-$username.txt <<-END
 END
 # // Success
 clear
+echo -e "==============================="
 echo -e "  SHADOWSOCKS ACCOUNT DETAILS"
 echo -e "==============================="
 echo -e " ISP         : ${ISPNYA}"
@@ -289,13 +290,14 @@ echo -e " Expired On  : ${exp}"
 echo -e "==============================="
 echo -e " SHADOWSOCKS GRPC LINK :"
 echo -e " ${shadowsockslink1}"
-echo -e "==============================="
+echo -e "-------------------------------"
 echo -e " SHADOWSOCKS WS TLS LINK :"
 echo -e " ${shadowsockslink}"
-echo -e "==============================="
-echo -e " CONFIG WS TLS   :" 
+echo -e "-------------------------------"
+echo -e " CONFIG JSON WS TLS   :" 
 echo -e " http://${domain}:81/ss-ws-$username.txt"
-echo -e " CONFIG GRPC TLS :"
+echo -e "-------------------------------"
+echo -e " CONFIG JSON GRPC TLS :"
 echo -e " http://${domain}:81/ss-grpc-$username.txt"
 echo -e "==============================="
 }
@@ -408,7 +410,6 @@ read -p "     [1-3 or type x to return to main menu] : "  menuss
 echo -e ""
 case $menuss in
 1)
-clear
 addss
 echo ""
 read -p "Click Enter To Return To The Menu..."
@@ -416,7 +417,6 @@ clear
 menu-ss
 ;;
 2)
-clear
 delss
 echo ""
 read -p "Click Enter To Return To The Menu..."
@@ -424,7 +424,6 @@ clear
 menu-ss
 ;;
 3)
-clear
 renewss
 echo ""
 read -p "Click Enter To Return To The Menu..."
