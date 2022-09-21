@@ -113,7 +113,7 @@
         "network": "grpc",
         "grpcSettings": {
           "acceptProxyProtocol": true,
-          "serviceName": "Trojan-GRPC"
+          "serviceName": "trojan-grpc"
         }
       }
     },
@@ -130,7 +130,7 @@
         "security": "none",
         "grpcSettings": {
           "acceptProxyProtocol": true,
-          "serviceName": "Vmess-GRPC"
+          "serviceName": "vmess-grpc"
         }
       }
     },
@@ -146,7 +146,7 @@
         "network": "grpc",
         "grpcSettings": {
           "acceptProxyProtocol": true,
-          "serviceName": "Vless-GRPC"
+          "serviceName": "vless-grpc"
         }
       }
     },
