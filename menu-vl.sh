@@ -65,6 +65,7 @@ systemctl restart xray@nontls
 
 # // Success
 clear
+echo -e "==============================="
 echo -e "     VLESS ACCOUNT DETAILS"
 echo -e "==============================="
 echo -e " ISP         : ${ISPNYA}"
@@ -80,10 +81,10 @@ echo -e " Expired On  : ${exp}"
 echo -e "==============================="
 echo -e " VLESS WS TLS LINK :"
 echo -e " ${vless_tls}"
-echo -e "==============================="
+echo -e "-------------------------------"
 echo -e " VLESS WS NTLS LINK :"
 echo -e " ${vless_nontls}"
-echo -e "==============================="
+echo -e "-------------------------------"
 echo -e " VLESS GRPC LINK :"
 echo -e " ${vless_grpc}"
 echo -e "==============================="
@@ -196,7 +197,6 @@ read -p "     [1-3 or type x to return to main menu] : " menuvl
 echo -e ""
 case $menuvl in
 1)
-clear
 addvl
 echo ""
 read -p "Click Enter To Return To The Menu..."
@@ -204,7 +204,6 @@ clear
 menu-vl
 ;;
 2)
-clear
 delvl
 echo ""
 read -p "Click Enter To Return To The Menu..."
@@ -212,7 +211,6 @@ clear
 menu-vl
 ;;
 3)
-clear
 renewvl
 echo ""
 read -p "Click Enter To Return To The Menu..."
