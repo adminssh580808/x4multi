@@ -11,7 +11,7 @@ LIGHT="\e[037;1m"
 NC="\e[0m"
 
 # CRON
-nginx=$( systemctl status cron | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
+cron=$( systemctl status cron | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
 if [[ $nginx == "running" ]]; then
     BCD1="${GREEN}ON${NC}"
 else
