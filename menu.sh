@@ -9,7 +9,7 @@ PURPLE="\e[035;1m"
 CYAN="\e[036;1m"
 LIGHT="\e[037;1m"
 NC="\e[0m"
-echo -e " ${YELLOW} -------=[${NC} ${RED}PANEL MENU BY SSHINJECTOR.NET${NC} ${YELLOW}$]=------- ${NC}"
+echo -e " ${YELLOW} -------=[${NC} ${RED}PANEL MENU BY SSHINJECTOR.NET${NC} ${YELLOW}]=------- ${NC}"
 DM=$(cat /etc/xray/domain.conf)
 ISP=$(curl -s ipinfo.io/org | cut -d " " -f 2-10 )
 CITY=$(curl -s ipinfo.io/city )
@@ -18,6 +18,7 @@ IP=$(curl -s ipinfo.io/ip )
 JAM=$(date +"%T")
 HARI=$(date +"%A")
 TGL=$(date +"%d-%B-%Y")
+echo -e ""
 echo -e "          ${GREEN} ISP NAME :${NC}${LIGHT} ${ISP} ${NC}"
 echo -e "          ${GREEN} DOMAIN   :${NC}${LIGHT} ${DM} ${NC}"
 echo -e "          ${GREEN} IP VPS   :${NC}${LIGHT} ${IP} ${NC}"
