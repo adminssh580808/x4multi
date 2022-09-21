@@ -64,6 +64,7 @@ systemctl restart xray@tls
 
 # // Success
 clear
+echo -e "==============================="
 echo -e "    TROJAN ACCOUNT DETAILS"
 echo -e "==============================="
 echo -e " ISP         : ${ISPNYA}"
@@ -78,10 +79,10 @@ echo -e " Expired On  : ${exp}"
 echo -e "==============================="
 echo -e " TROJAN TCP TLS LINK :"
 echo -e " ${tcp_tls_link}"
-echo -e "==============================="
+echo -e "-------------------------------"
 echo -e " TROJAN WS TLS LINK :"
 echo -e " ${ws_tls_link}"
-echo -e "==============================="
+echo -e "-------------------------------"
 echo -e " TROJAN GRPC LINK :"
 echo -e " ${grpc_link}"
 echo -e "==============================="
@@ -194,7 +195,6 @@ read -p "     [1-3 or type x to return to main menu] : " menutr
 echo -e ""
 case $menutr in
 1)
-clear
 addtr
 echo ""
 read -p "Click Enter To Return To The Menu..."
@@ -202,7 +202,6 @@ clear
 menu-tr
 ;;
 2)
-clear
 deltr
 echo ""
 read -p "Click Enter To Return To The Menu..."
@@ -210,7 +209,6 @@ clear
 menu-tr
 ;;
 3)
-clear
 renewtr
 echo ""
 read -p "Click Enter To Return To The Menu..."
