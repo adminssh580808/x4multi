@@ -89,6 +89,7 @@ echo -e "==============================="
 
 function deltr(){
 clear
+
 IPNYA=$(wget --inet4-only -qO- https://ipinfo.io/ip)
 ISPNYA=$(wget --inet4-only -qO- https://ipinfo.io/org | cut -d " " -f 2-100)
 
@@ -123,6 +124,7 @@ systemctl restart xray@tls
 
 function renewtr(){
 clear
+
 IPNYA=$(wget --inet4-only -qO- https://ipinfo.io/ip)
 ISPNYA=$(wget --inet4-only -qO- https://ipinfo.io/org | cut -d " " -f 2-100)
 
