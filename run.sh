@@ -8,7 +8,6 @@ echo ""
 echo -e "\e[94m    .----------------------------------------------------.    "
 echo -e "\e[94m    |              DISPLAYING RUNNING SYSTEM             |    "
 echo -e "\e[94m    '----------------------------------------------------'    "
-echo -e "\e[0m"
 status="$(systemctl show xray@tls.service --no-page)"                                   
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
@@ -37,7 +36,7 @@ status="$(systemctl show xray@tls.service --no-page)"
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
 then                                                                                    
-echo -e "       XRAY VMESS       :  Service is "$green"running"$NC""                  
+echo -e "       XRAY VMESS       : Service is "$green"running"$NC""                  
 else                                                                                    
 echo -e "       XRAY VMESS       : Service is "$red"not running (Error)"$NC""        
 fi
@@ -61,7 +60,8 @@ status="$(systemctl show cron.service --no-page)"
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
 then                                                                                    
-echo -e "       CRON            : Service is "$green"running"$NC""                
+echo -e "       CRON             : Service is "$green"running"$NC""                
 else                                                                                    
-echo -e "       CRON            : Service is "$red"not running (Error)"$NC""      
+echo -e "       CRON             : Service is "$red"not running (Error)"$NC""      
 fi
+echo -e "\e[94m    ------------------------------------------------------"
