@@ -68,7 +68,7 @@ echo -e "Vless $username $exp $uuid" >>/etc/xray/vless-client.conf
 # // Vless Link
 vless_nontls="vless://${uuid}@${domain}:${nontls_port}?path=%2Fvless&security=none&encryption=none&type=ws#${username}"
 vless_tls="vless://${uuid}@${domain}:${tls_port}?path=%2Fvless&security=tls&encryption=none&type=ws#${username}"
-vless_grpc="vless://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&encryption=none&type=grpc&serviceName=Vless-GRPC#${username}"
+vless_grpc="vless://${uuid}@${domain}:${tls_port}?mode=gun&security=tls&encryption=none&type=grpc&serviceName=vless-grpc#${username}"
 
 # // Restarting XRay Service
 systemctl restart xray@tls
@@ -86,7 +86,7 @@ echo -e " Port TLS    : ${tls_port}"
 echo -e " Port NonTLS : ${nontls_port}"
 echo -e " UUID        : ${uuid}"
 echo -e " Path WS     : /vless"
-echo -e " ServiceName : Vless-GRPC"
+echo -e " ServiceName : vless-grpc"
 echo -e " Expired On  : ${exp}"
 echo -e "==============================="
 echo -e " VLESS WS TLS LINK :"
