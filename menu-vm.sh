@@ -102,6 +102,99 @@ echo -e " ${grpc_link}"
 echo -e "==============================="
 }
 
+function delvm(){
+clear
+
+IPNYA=$(wget --inet4-only -qO- https://ipinfo.io/ip)
+ISPNYA=$(wget --inet4-only -qO- https://ipinfo.io/org | cut -d " " -f 2-100)
+
+# // Start
+CLIENT_001=$(grep -c -E "^Vmess " "/etc/xray/vmess-client.conf")
+echo "    =================================================="
+echo "              LIST VMESS CLIENT ON THIS VPS"
+echo "    =================================================="
+grep -e "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 2-3 | nl -s ') '
+until [[ ${CLIENT_002} -ge 1 && ${CLIENT_002} -le ${CLIENT_001} ]]; do
+    if [[ ${CLIENT_002} == '1' ]]; then
+        echo "    =================================================="
+        read -rp "    Please Input an Client Number (1-${CLIENT_001}) : " CLIENT_002
+    else
+        echo "    =================================================="
+        read -rp "    Please Input an Client Number (1-${CLIENT_001}) : " CLIENT_002
+    fi
+done
+
+# // String For Username && Expired Date
+client=$(grep "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 2 | sed -n "${CLIENT_002}"p)
+expired=$(grep "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 3 | sed -n "${CLIENT_002}"p)
+
+cat /etc/xray/config/xray/tls.json | jq 'del(.inbounds[2].settings.clients[] | select(.email == "'${client}'"))' >/etc/xray/config/xray/tls.json.tmp && mv /etc/xray/config/xray/tls.json.tmp /etc/xray/config/xray/tls.json
+cat /etc/xray/config/xray/tls.json | jq 'del(.inbounds[5].settings.clients[] | select(.email == "'${client}'"))' >/etc/xray/config/xray/tls.json.tmp && mv /etc/xray/config/xray/tls.json.tmp /etc/xray/config/xray/tls.json
+cat /etc/xray/config/xray/nontls.json | jq 'del(.inbounds[0].settings.clients[] | select(.email == "'${client}'"))' >/etc/xray/config/xray/nontls.json.tmp && mv /etc/xray/config/xray/nontls.json.tmp /etc/xray/config/xray/nontls.json
+rm -f /etc/xray/xray-cache/vmess-tls-gun-$client.json /etc/xray/xray-cache/vmess-tls-ws-$client.json /etc/xray/xray-cache/vmess-nontls-$client.json
+sed -i "/\b$client\b/d" /etc/xray/vmess-client.conf
+systemctl restart xray@tls
+systemctl restart xray@nontls
+
+clear
+echo -e "${OKEY} Username ( ${YELLOW}$client${NC} ) Has Been Removed !"
+}
+
+function renewvm(){
+clear
+
+IPNYA=$(wget --inet4-only -qO- https://ipinfo.io/ip)
+ISPNYA=$(wget --inet4-only -qO- https://ipinfo.io/org | cut -d " " -f 2-100)
+
+# // Start
+CLIENT_001=$(grep -c -E "^Vmess " "/etc/xray/vmess-client.conf")
+echo "    =================================================="
+echo "               LIST VMESS CLIENT ON THIS VPS"
+echo "    =================================================="
+grep -e "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 2-3 | nl -s ') '
+until [[ ${CLIENT_002} -ge 1 && ${CLIENT_002} -le ${CLIENT_001} ]]; do
+    if [[ ${CLIENT_002} == '1' ]]; then
+        echo "    =================================================="
+        read -rp "    Please Input an Client Number (1-${CLIENT_001}) : " CLIENT_002
+    else
+        echo "    =================================================="
+        read -rp "    Please Input an Client Number (1-${CLIENT_001}) : " CLIENT_002
+    fi
+done
+
+# // String For Username && Expired Date
+client=$(grep "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 2 | sed -n "${CLIENT_002}"p)
+expired=$(grep "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 3 | sed -n "${CLIENT_002}"p)
+uuidnta=$(grep "^Vmess " "/etc/xray/vmess-client.conf" | cut -d ' ' -f 4 | sed -n "${CLIENT_002}"p)
+
+# // Extending Days
+clear
+read -p "Expired  : " Jumlah_Hari
+if [[ $Jumlah_Hari == "" ]]; then
+    clear
+    echo -e "${FAIL} Mohon Masukan Jumlah Hari perpanjangan !"
+    exit 1
+fi
+
+# // Date Configuration
+now=$(date +%Y-%m-%d)
+d1=$(date -d "$expired" +%s)
+d2=$(date -d "$now" +%s)
+exp2=$(((d1 - d2) / 86400))
+exp3=$(($exp2 + $Jumlah_Hari))
+exp4=$(date -d "$exp3 days" +"%Y-%m-%d")
+
+# // Input To System Configuration
+sed -i "/\b$client\b/d" /etc/xray/vmess-client.conf
+echo -e "Vmess $client $exp4 $uuidnta" >>/etc/xray/vmess-client.conf
+
+# // Clear
+clear
+
+# // Successfull
+echo -e "${OKEY} User ( ${YELLOW}${client}${NC} ) Renewed Then Expired On ( ${YELLOW}$exp4${NC} )"
+}
+
 echo -e ""
 echo -e " ${YELLOW} -----------------=[${NC} ${RED}PANEL XRAY VMESS${NC} ${YELLOW}]=----------------- ${NC}"
 echo -e "    ${GREEN} 1${NC}${LIGHT})${NC} ${LIGHT}CREATE USER VMESS${NC}"
