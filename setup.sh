@@ -153,50 +153,11 @@ function install_requirement() {
     echo "clear" >>.profile
     echo "neofetch" >>.profile
 
-    # // Install smtp
-
-    curl https://rclone.org/install.sh | bash
-    printf "q\n" | rclone config
-    wget -O /root/.config/rclone/rclone.conf "${SCRIPT_URL}/rclone.conf"
-    git clone  https://github.com/magnific0/wondershaper.git
-    cd wondershaper
-    make install
-    cd
-    rm -rf wondershaper
-    echo > /home/limit
-    apt install msmtp-mta ca-certificates bsd-mailx -y
-    wget --inet4-only -O /etc/msmtprc "${SCRIPT_URL}/msmtprc"
-    chown -R www-data:www-data /etc/msmtprc
-
     # // Install python2
     apt install python2 -y >/dev/null 2>&1
 
     # // Download menu
     cd /usr/bin
-    wget --inet4-only -O addvmess "${SCRIPT_URL}/addvmess.sh"
-    chmod +x addvmess
-    wget --inet4-only -O addvless "${SCRIPT_URL}/addvless.sh"
-    chmod +x addvless
-    wget --inet4-only -O addtrojan "${SCRIPT_URL}/addtrojan.sh"
-    chmod +x addtrojan
-    wget --inet4-only -O addss "${SCRIPT_URL}/addss.sh"
-    chmod +x addss
-    wget --inet4-only -O delvmess "${SCRIPT_URL}/delvmess.sh"
-    chmod +x delvmess
-    wget --inet4-only -O delvless "${SCRIPT_URL}/delvless.sh"
-    chmod +x delvless
-    wget --inet4-only -O deltrojan "${SCRIPT_URL}/deltrojan.sh"
-    chmod +x deltrojan
-    wget --inet4-only -O delss "${SCRIPT_URL}/delss.sh"
-    chmod +x delss
-    wget --inet4-only -O renewvmess "${SCRIPT_URL}/renewvmess.sh"
-    chmod +x renewvmess
-    wget --inet4-only -O renewvless "${SCRIPT_URL}/renewvless.sh"
-    chmod +x renewvless
-    wget --inet4-only -O renewtrojan "${SCRIPT_URL}/renewtrojan.sh"
-    chmod +x renewtrojan
-    wget --inet4-only -O renewss "${SCRIPT_URL}/renewss.sh"
-    chmod +x renewss
     wget --inet4-only -O xray-cert "${SCRIPT_URL}/cert.sh"
     chmod +x xray-cert
     wget --inet4-only -O menu "${SCRIPT_URL}/menu.sh"
@@ -209,22 +170,12 @@ function install_requirement() {
     chmod +x menu-vl
     wget --inet4-only -O menu-vm "${SCRIPT_URL}/menu-vm.sh"
     chmod +x menu-vm
-    wget --inet4-only -O autobackup "${SCRIPT_URL}/autobackup.sh"
-    chmod +x autobackup
-    wget --inet4-only -O backup "${SCRIPT_URL}/backup.sh"
-    chmod +x backup
-    wget --inet4-only -O bckp "${SCRIPT_URL}/bckp.sh"
-    chmod +x bckp
-    wget --inet4-only -O restore "${SCRIPT_URL}/restore.sh"
-    chmod +x restore
     wget --inet4-only -O run "${SCRIPT_URL}/run.sh"
     chmod +x run
     wget --inet4-only -O c-log "${SCRIPT_URL}/c-log.sh"
     chmod +x c-log
     wget --inet4-only -O info "${SCRIPT_URL}/info.sh"
     chmod +x info
-    wget --inet4-only -O limit-speed "${SCRIPT_URL}/limit-speed.sh"
-    chmod +x limit-speed
     wget --inet4-only -O addhost "${SCRIPT_URL}/addhost.sh"
     chmod +x addhost
     wget -q -O speedtest "${SCRIPT_URL}/speedtest_cli.py"
