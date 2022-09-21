@@ -1,5 +1,6 @@
 #!/bin/bash
 
+clear
 domain=$(cat /etc/xray/domain.conf)
 
 # Menghentikan Port 443 & 80 jika berjalan
