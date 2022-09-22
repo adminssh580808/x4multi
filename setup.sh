@@ -24,22 +24,69 @@ function import_string() {
     export WARNING="${RED}\e[5m"
     export UNDERLINE="\e[4m"
 }
-echo -e " ${GREEN}Checking IP to Access This Script${NC}"
-sleep 1
-MYIP=$(wget -qO- ipv4.icanhazip.com);
-wget -q -O PREMI "${SCRIPT_URL}/akses"
-if ! grep -w -q $MYIP PREMI; then
-	echo "Maaf, hanya IP yang terdaftar yang bisa menggunakan script ini!"
-	echo "Jika Berminat menggunakan Auto Script Premium ini silahkan hubungi admin :)"
-	rm /root/PREMI
-	rm setup.sh
-	rm -f /root/PREMI
-	exit
+
+dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
+biji=`date +"%Y-%m-%d" -d "$dateFromServer"`
+#########################
+
+BURIQ () {
+    curl -sS https://raw.githubusercontent.com/adminssh580808/permission/main/ipmini > /root/tmp
+    data=( `cat /root/tmp | grep -E "^### " | awk '{print $2}'` )
+    for user in "${data[@]}"
+    do
+    exp=( `grep -E "^### $user" "/root/tmp" | awk '{print $3}'` )
+    d1=(`date -d "$exp" +%s`)
+    d2=(`date -d "$biji" +%s`)
+    exp2=$(( (d1 - d2) / 86400 ))
+    if [[ "$exp2" -le "0" ]]; then
+    echo $user > /etc/.$user.ini
+    else
+    rm -f /etc/.$user.ini > /dev/null 2>&1
+    fi
+    done
+    rm -f /root/tmp
+}
+
+MYIP=$(curl -sS ipv4.icanhazip.com)
+Name=$(curl -sS https://raw.githubusercontent.com/adminssh580808/permission/main/ipmini | grep $MYIP | awk '{print $2}')
+echo $Name > /usr/local/etc/.$Name.ini
+CekOne=$(cat /usr/local/etc/.$Name.ini)
+
+Bloman () {
+if [ -f "/etc/.$Name.ini" ]; then
+CekTwo=$(cat /etc/.$Name.ini)
+    if [ "$CekOne" = "$CekTwo" ]; then
+        res="Expired"
+    fi
+else
+res="Permission Accepted..."
+fi
+}
+
+PERMISSION () {
+    MYIP=$(curl -sS ipv4.icanhazip.com)
+    IZIN=$(curl -sS https://raw.githubusercontent.com/adminssh580808/permission/main/ipmini | awk '{print $4}' | grep $MYIP)
+    if [ "$MYIP" = "$IZIN" ]; then
+    Bloman
+    else
+    res="Permission Denied!"
+    fi
+    BURIQ
+}
+green() { echo -e "\\033[32;1m${*}\\033[0m"; }
+red() { echo -e "\\033[31;1m${*}\\033[0m"; }
+
+PERMISSION
+if [ -f /home/needupdate ]; then
+red "Your script need to update first !"
+exit 0
+elif [ "$res" = "Permission Accepted..." ]; then
+echo -ne
+else
+red "Permission Denied!"
+exit 0
 fi
 
-clear
-echo -e "${GRENN}Proses instalasi script dimulai.....${NC}"
-sleep 1
 function check_root() {
     if [[ $(whoami) != 'root' ]]; then
         clear
