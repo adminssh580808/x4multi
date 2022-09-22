@@ -69,7 +69,7 @@ function install_requirement() {
     # // Menginstall paket yang di butuhkan
     apt install build-essential apt-transport-https -y
     apt install zip unzip nano net-tools make git lsof wget curl jq bc gcc make cmake neofetch htop libssl-dev socat sed zlib1g-dev libsqlite3-dev libpcre3 libpcre3-dev libgd-dev -y
-	apt-get install uuid-runtime
+    apt-get install uuid-runtime
 
     # // Menghentikan Port 443 & 80 jika berjalan
     lsof -t -i tcp:80 -s tcp:listen | xargs kill >/dev/null 2>&1
@@ -93,7 +93,7 @@ function install_requirement() {
     curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
     apt update
     apt install nginx -y
-    cat > /etc/nginx/nginx.conf <<END
+cat > /etc/nginx/nginx.conf << END
 user www-data;
 
 worker_processes 1;
@@ -143,8 +143,8 @@ http {
     include /etc/nginx/conf.d/*.conf;
 }
 END
-cd
-    cat > /etc/nginx/conf.d/xray.conf <<END
+
+cat > /etc/nginx/conf.d/xray.conf << END
 server {
   listen       81;
   server_name  127.0.0.1 localhost;
@@ -245,7 +245,8 @@ END
     mkdir -p /etc/xray/config/xray/
     wget --inet4-only -qO- "${SCRIPT_URL}/tls.json" | jq '.inbounds[0].streamSettings.xtlsSettings.certificates += [{"certificateFile": "'/root/.acme.sh/${hostname}_ecc/fullchain.cer'","keyFile": "'/root/.acme.sh/${hostname}_ecc/${hostname}.key'"}]' >/etc/xray/config/xray/tls.json
     wget --inet4-only -qO- "${SCRIPT_URL}/nontls.json" >/etc/xray/config/xray/nontls.json
-    cat > /etc/systemd/system/xray@.service <<END
+
+cat <<EOF> /etc/systemd/system/xray@.service
 [Unit]
 Description=XRay XTLS Service ( %i )
 Documentation=https://github.com/XTLS/Xray-core
@@ -262,7 +263,7 @@ RestartPreventExitStatus=23
 
 [Install]
 WantedBy=multi-user.target
-END
+EOF
 
     systemctl daemon-reload
     systemctl stop xray@tls
@@ -280,7 +281,6 @@ END
     rm -f /root/.bashrc
     echo "clear" >>.bashrc
     echo "neofetch" >>.bashrc
-    echo "Type menu To acces Panel" >>.bashrc
 
     # // Install python2
     apt install python2 -y >/dev/null 2>&1
@@ -300,9 +300,8 @@ END
     wget -q -O speedtest "${SCRIPT_URL}/speedtest_cli.py"
     chmod +x speedtest
     cd
-
-    cd /usr/bin
-    cat > xp <<END
+ 
+cat > /usr/bin/xp << END
 #!/bin/bash
 
 # SHADOWSOCKS
@@ -323,7 +322,6 @@ rm -f /home/vps/public_html/ss-grpc-${user}.txt
 rm -f /home/vps/public_html/ss-ws-${user}.txt
 fi
 done
-
 
 # TROJAN
 datat=( `cat /etc/xray/trojan-client.conf | grep '^Trojan' | cut -d ' ' -f 2`);
@@ -383,11 +381,10 @@ fi
 done
 END
 
-    chmod +x xp
-    cd
+chmod +x /usr/bin/xp
 
-    sed -i -e 's/\r$//' xp
-    cd
+sed -i -e 's/\r$//' xp
+cd
 
     echo "0 5 * * * root reboot" >> /etc/crontab
     echo "0 0 * * * root xp" >> /etc/crontab
