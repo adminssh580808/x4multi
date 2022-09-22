@@ -3,7 +3,7 @@
 clear
 
 function import_string() {
-    export SCRIPT_URL='https://raw.githubusercontent.com/adminssh580808/x4multi/main'
+    export SCRIPT_URL='https://raw.githubusercontent.com/adminssh580808/JKW/main'
     export RED="\033[0;31m"
     export GREEN="\033[0;32m"
     export YELLOW="\033[0;33m"
@@ -24,22 +24,7 @@ function import_string() {
     export WARNING="${RED}\e[5m"
     export UNDERLINE="\e[4m"
 }
-echo -e " ${GREEN}Checking IP to Access This Script${NC}"
-sleep 1
-MYIP=$(wget -qO- ipv4.icanhazip.com);
-wget -q -O PREMI "${SCRIPT_URL}/akses"
-if ! grep -w -q $MYIP PREMI; then
-	echo "Maaf, hanya IP yang terdaftar yang bisa menggunakan script ini!"
-	echo "Jika Berminat menggunakan Auto Script Premium ini silahkan hubungi admin :)"
-	rm /root/PREMI
-	rm setup.sh
-	rm -f /root/PREMI
-	exit
-fi
 
-clear
-echo -e "${GRENN}Proses instalasi script dimulai.....${NC}"
-sleep 1
 function check_root() {
     if [[ $(whoami) != 'root' ]]; then
         clear
@@ -84,7 +69,7 @@ function install_requirement() {
     # // Menginstall paket yang di butuhkan
     apt install build-essential apt-transport-https -y
     apt install zip unzip nano net-tools make git lsof wget curl jq bc gcc make cmake neofetch htop libssl-dev socat sed zlib1g-dev libsqlite3-dev libpcre3 libpcre3-dev libgd-dev -y
-    apt-get install uuid-runtime
+	apt-get install uuid-runtime
 
     # // Menghentikan Port 443 & 80 jika berjalan
     lsof -t -i tcp:80 -s tcp:listen | xargs kill >/dev/null 2>&1
@@ -98,18 +83,128 @@ function install_requirement() {
     /root/.acme.sh/acme.sh --register-account -m tambarin45@gmail.com
     /root/.acme.sh/acme.sh --issue -d $hostname --standalone -k ec-256 -ak ec-256
 
-    # // Menyetting waktu menjadi waktu WIB
+    # Menyetting waktu menjadi waktu WIB
     ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
     # // Install nginx
     apt-get install libpcre3 libpcre3-dev zlib1g-dev dbus -y
     echo "deb http://nginx.org/packages/mainline/debian $(lsb_release -cs) nginx" |
-    sudo tee /etc/apt/sources.list.d/nginx.list
+        sudo tee /etc/apt/sources.list.d/nginx.list
     curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
     apt update
     apt install nginx -y
-    wget -q -O /etc/nginx/nginx.conf "${SCRIPT_URL}/nginx.conf"
-    wget -q -O /etc/nginx/conf.d/xray.conf "${SCRIPT_URL}/xray.conf"
+    cat > /etc/nginx/nginx.conf <<END
+user www-data;
+
+worker_processes 1;
+pid /var/run/nginx.pid;
+
+events {
+	multi_accept on;
+    worker_connections 1024;
+}
+
+http {
+	gzip on;
+	gzip_vary on;
+	gzip_comp_level 5;
+	gzip_types    text/plain application/x-javascript text/xml text/css;
+	autoindex on;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    server_tokens off;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    access_log /var/log/nginx/access.log;
+  	error_log /var/log/nginx/error.log error;
+    client_max_body_size 32M;
+	client_header_buffer_size 8m;
+	large_client_header_buffers 8 8m;
+	fastcgi_buffer_size 8m;
+	fastcgi_buffers 8 8m;
+	fastcgi_read_timeout 600;
+	set_real_ip_from 204.93.240.0/24;
+	set_real_ip_from 204.93.177.0/24;
+	set_real_ip_from 199.27.128.0/21;
+	set_real_ip_from 173.245.48.0/20;
+	set_real_ip_from 103.21.244.0/22;
+	set_real_ip_from 103.22.200.0/22;
+	set_real_ip_from 103.31.4.0/22;
+	set_real_ip_from 141.101.64.0/18;
+	set_real_ip_from 108.162.192.0/18;
+	set_real_ip_from 190.93.240.0/20;
+	set_real_ip_from 188.114.96.0/20;
+	set_real_ip_from 197.234.240.0/22;
+	set_real_ip_from 198.41.128.0/17;
+	real_ip_header CF-Connecting-IP;
+    include /etc/nginx/conf.d/*.conf;
+}
+END
+cd
+    cat > /etc/nginx/conf.d/xray.conf <<END
+server {
+  listen       81;
+  server_name  127.0.0.1 localhost;
+  root   /home/vps/public_html;
+
+  location / {
+    index  index.html index.htm index.php;
+    try_files $uri $uri/ /index.php?$args;
+  }
+
+  location ~ \.php$ {
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass  127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+}
+
+# // Config For GRPC
+server {
+        listen 127.0.0.1:34804 http2 so_keepalive=on;
+        root /home/vps/public_html;
+        client_header_timeout 1071906480m;
+        keepalive_timeout 1071906480m;
+        location /trojan-grpc {
+                client_max_body_size 0;
+                grpc_set_header X-Real-IP $proxy_add_x_forwarded_for;
+                client_body_timeout 1071906480m;
+                grpc_read_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:34805;
+        }
+        location /vmess-grpc {
+                client_max_body_size 0;
+                grpc_set_header X-Real-IP $proxy_add_x_forwarded_for;
+                client_body_timeout 1071906480m;
+                grpc_read_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:34806;
+        }
+        location /vless-grpc {
+                client_max_body_size 0;
+                grpc_set_header X-Real-IP $proxy_add_x_forwarded_for;
+                client_body_timeout 1071906480m;
+                grpc_read_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:34807;
+        }
+
+        location /ss-grpc {
+            if ($request_method != "POST") { 
+                return 404;
+            }
+            client_body_buffer_size 1m;
+            client_body_timeout 1h;
+            client_max_body_size 0;
+            grpc_pass grpc://127.0.0.1:2011;
+            grpc_read_timeout 1h;
+            grpc_send_timeout 1h;
+            grpc_set_header X-Real-IP $remote_addr;
+        }
+}
+END
     rm -rf /etc/nginx/conf.d/default.conf
     systemctl enable nginx
     mkdir -p /home/vps/public_html
@@ -150,8 +245,7 @@ function install_requirement() {
     mkdir -p /etc/xray/config/xray/
     wget --inet4-only -qO- "${SCRIPT_URL}/tls.json" | jq '.inbounds[0].streamSettings.xtlsSettings.certificates += [{"certificateFile": "'/root/.acme.sh/${hostname}_ecc/fullchain.cer'","keyFile": "'/root/.acme.sh/${hostname}_ecc/${hostname}.key'"}]' >/etc/xray/config/xray/tls.json
     wget --inet4-only -qO- "${SCRIPT_URL}/nontls.json" >/etc/xray/config/xray/nontls.json
-
-cat <<EOF> /etc/systemd/system/xray@.service
+    cat > /etc/systemd/system/xray@.service <<END
 [Unit]
 Description=XRay XTLS Service ( %i )
 Documentation=https://github.com/XTLS/Xray-core
@@ -168,7 +262,7 @@ RestartPreventExitStatus=23
 
 [Install]
 WantedBy=multi-user.target
-EOF
+END
 
     systemctl daemon-reload
     systemctl stop xray@tls
@@ -186,6 +280,7 @@ EOF
     rm -f /root/.bashrc
     echo "clear" >>.bashrc
     echo "neofetch" >>.bashrc
+    echo "Type menu To acces Panel" >>.bashrc
 
     # // Install python2
     apt install python2 -y >/dev/null 2>&1
@@ -205,8 +300,9 @@ EOF
     wget -q -O speedtest "${SCRIPT_URL}/speedtest_cli.py"
     chmod +x speedtest
     cd
- 
-cat > /usr/bin/xp << END
+
+    cd /usr/bin
+    cat > xp <<END
 #!/bin/bash
 
 # SHADOWSOCKS
@@ -227,6 +323,7 @@ rm -f /home/vps/public_html/ss-grpc-${user}.txt
 rm -f /home/vps/public_html/ss-ws-${user}.txt
 fi
 done
+
 
 # TROJAN
 datat=( `cat /etc/xray/trojan-client.conf | grep '^Trojan' | cut -d ' ' -f 2`);
@@ -286,10 +383,11 @@ fi
 done
 END
 
-chmod +x /usr/bin/xp
+    chmod +x xp
+    cd
 
-sed -i -e 's/\r$//' xp
-cd
+    sed -i -e 's/\r$//' xp
+    cd
 
     echo "0 5 * * * root reboot" >> /etc/crontab
     echo "0 0 * * * root xp" >> /etc/crontab

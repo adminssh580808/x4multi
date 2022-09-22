@@ -186,9 +186,9 @@ echo -e " ${YELLOW} ----------------=[${NC} ${RED}PANEL XRAY TROJAN${NC} ${YELLO
 echo -e "    ${GREEN} 1${NC}${LIGHT})${NC} ${LIGHT}CREATE USER TROJAN${NC}"
 echo -e "    ${GREEN} 2${NC}${LIGHT})${NC} ${LIGHT}DELETE USER TROJAN${NC}"
 echo -e "    ${GREEN} 3${NC}${LIGHT})${NC} ${LIGHT}RENEW USER TROJAN${NC}"
-echo -e " ${YELLOW} ------------------------------------------------------- ${NC}"
+echo -e " ${YELLOW} -------------------------------------------------------- ${NC}"
 echo -e "       ${GREEN} x${NC}${LIGHT})${NC} ${LIGHT}EXIT${NC}"
-echo -e " ${YELLOW} ------------------------------------------------------- ${NC}"
+echo -e " ${YELLOW} -------------------------------------------------------- ${NC}"
 echo -e ""
 echo -e "    ${LIGHT} Select From Options ${NC}"
 read -p "     [1-3 or type x to return to main menu] : " menutr
