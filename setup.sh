@@ -278,10 +278,9 @@ END
 
     # // Download welcome
     rm -f /root/.bashrc
-    echo "clear" >>/root/.bashrc
-    echo "neofetch" >>/root/.bashrc
-    read -p "Enter To acces Panel Menu" >>/root/.bashrc
-    echo "menu" >> /root/.bashrc
+    echo "clear" >>.bashrc
+    echo "neofetch" >>.bashrc
+    echo "Type menu To acces Panel" >>.bashrc
 
     # // Install python2
     apt install python2 -y >/dev/null 2>&1
