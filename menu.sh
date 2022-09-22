@@ -74,7 +74,7 @@ fi
 
 # // nginx
 crod=$( systemctl status cron | grep Active | awk '{print $3}' | sed 's/(//g' | sed 's/)//g' )
-if [[ $cronld == "running" ]]; then
+if [[ $crod == "running" ]]; then
     BCD1="${GREEN}ON${NC}"
 else
     BCD1="${RED}OFF${NC}"
@@ -104,7 +104,7 @@ fi
 
 echo -e ""
 echo -e "  ${YELLOW}----------=[${NC} ${RED}PREMIUM PANEL MENU${NC} ${YELLOW}]=---------- ${NC}"
-echo -e "  ${YELLOW}-------------------------------------------- ${NC}"
+echo -e ""
 DOMAIN=$(cat /etc/xray/domain.conf)
 ISP=$(curl -s ipinfo.io/org | cut -d " " -f 2-10 )
 CITY=$(curl -s ipinfo.io/city )
@@ -113,17 +113,18 @@ IP=$(curl -s ipinfo.io/ip )
 JAM=$(date +"%T")
 HARI=$(date +"%A")
 TGL=$(date +"%d-%B-%Y")
-echo -e "      ${GREEN} ISP NAME${NC}${LIGHT} : ${ISP} ${NC}"
-echo -e "      ${GREEN} DOMAIN${NC}${LIGHT}   : ${DOMAIN} ${NC}"
-echo -e "      ${GREEN} IP VPS${NC}${LIGHT}   : ${IP} ${NC}"
-echo -e "      ${GREEN} DAY${NC}${LIGHT}      : ${HARI} ${NC}"
-echo -e "      ${GREEN} DATE${NC}${LIGHT}     : ${TGL} ${NC}"
-echo -e "      ${GREEN} TIME${NC}${LIGHT}     : ${JAM} ${NC}"
-echo -e "      ${GREEN} CITY${NC}${LIGHT}     : ${CITY} ${NC}"
-echo -e "      ${GREEN} TIMEZONE${NC}${LIGHT} : ${WKT} ${NC}"
+echo -e "        ${GREEN} ISP NAME${NC}${LIGHT} : ${ISP} ${NC}"
+echo -e "        ${GREEN} DOMAIN${NC}${LIGHT}   : ${DOMAIN} ${NC}"
+echo -e "        ${GREEN} IP VPS${NC}${LIGHT}   : ${IP} ${NC}"
+echo -e "        ${GREEN} DAY${NC}${LIGHT}      : ${HARI} ${NC}"
+echo -e "        ${GREEN} DATE${NC}${LIGHT}     : ${TGL} ${NC}"
+echo -e "        ${GREEN} TIME${NC}${LIGHT}     : ${JAM} ${NC}"
+echo -e "        ${GREEN} CITY${NC}${LIGHT}     : ${CITY} ${NC}"
+echo -e "        ${GREEN} TIMEZONE${NC}${LIGHT} : ${WKT} ${NC}"
 echo -e "  ${YELLOW}-------------------------------------------- ${NC}"
 echo -e "  ${LIGHT}  CRON =${NC} $BCD1      ${LIGHT}NGINX =${NC} $BCD2      ${LIGHT}XRAY =${NC} $BCD3"
 echo -e "  ${YELLOW}-------------------------------------------- ${NC}"
+echo -e ""
 echo -e "  ${YELLOW}-------------=[${NC} ${RED}XRAY SERVICE${NC} ${YELLOW}]=------------- ${NC}"
 echo -e "    ${GREEN} 1${NC}${LIGHT}). PANEL SHADOWSOCKS${NC}"
 echo -e "    ${GREEN} 2${NC}${LIGHT}). PANEL TROJAN${NC}"
@@ -139,7 +140,7 @@ echo -e "    ${GREEN} 9${NC}${LIGHT}). CHECK RUNNING SERVICE${NC}"
 echo -e "   ${GREEN} 10${NC}${LIGHT}). INFORMATION SCRIPT${NC}"
 echo -e "   ${GREEN} 11${NC}${LIGHT}). REBOOT VPS${NC}"
 echo -e "  ${YELLOW}-------------------------------------------- ${NC}"
-echo -e "      ${LIGHT}USER ROLES = $Name      ${NC}${LIGHT}CLIENT NAME = $cit"
+echo -e "     ${LIGHT}USER ROLES = $cit   ${NC}${LIGHT}CLIENT NAME =${RED} $Name ${NC}"
 echo -e "  ${YELLOW}-------------------------------------------- ${NC}"
 echo -e "    ${LIGHT} Select From Options ${NC}"
 read -p "     [1-11 or type x to exit the menu] : " menuu
