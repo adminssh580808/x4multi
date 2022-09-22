@@ -3,7 +3,7 @@
 clear
 
 function import_string() {
-    export SCRIPT_URL='https://raw.githubusercontent.com/adminssh580808/JKW/main'
+    export SCRIPT_URL='https://raw.githubusercontent.com/adminssh580808/x4multi/main'
     export RED="\033[0;31m"
     export GREEN="\033[0;32m"
     export YELLOW="\033[0;33m"
