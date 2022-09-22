@@ -172,16 +172,118 @@ clear
 menu
 ;;
 9)
+#!/bin/bash
+
+red="\033[0;32m"
+green="\033[0;32m"
+NC="\e[0m"
 clear
-run
+echo ""
+echo -e "\e[94m    .----------------------------------------------------.    "
+echo -e "\e[94m    |              DISPLAYING RUNNING SYSTEM             |    "
+echo -e "\e[94m    '----------------------------------------------------'    $NC"
+status="$(systemctl show xray@tls.service --no-page)"                                   
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       XRAY SHADOWSOCKS : Service is "$green"running"$NC""                  
+else                                                                                    
+echo -e "       XRAY SHADOWSOCKS : Service is "$red"not running (Error)"$NC""        
+fi
+status="$(systemctl show xray@tls.service --no-page)"                                   
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       XRAY TROJAN      : Service is "$green"running"$NC""                  
+else                                                                                    
+echo -e "       XRAY TROJAN      : Service is "$red"not running (Error)"$NC""        
+fi
+status="$(systemctl show xray@tls.service --no-page)"                                   
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       XRAY VLESS       : Service is "$green"running"$NC""                  
+else                                                                                    
+echo -e "       XRAY VLESS       : Service is "$red"not running (Error)"$NC""    
+fi
+status="$(systemctl show xray@tls.service --no-page)"                                   
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       XRAY VMESS       : Service is "$green"running"$NC""                  
+else                                                                                    
+echo -e "       XRAY VMESS       : Service is "$red"not running (Error)"$NC""        
+fi
+tatus="$(systemctl show xray@tls.service --no-page)"                                   
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       XRAY MULTI       : Service is "$green"running"$NC""                  
+else                                                                                    
+echo -e "       XRAY MULTI       : Service is "$red"not running (Error)"$NC""        
+fi
+status="$(systemctl show nginx.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       NGINX            : Service is "$green"running"$NC""                
+else                                                                                    
+echo -e "       NGINX            : Service is "$red"not running (Error)"$NC""      
+fi
+status="$(systemctl show cron.service --no-page)"                                      
+status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
+if [ "${status_text}" == "active" ]                                                     
+then                                                                                    
+echo -e "       CRON             : Service is "$green"running"$NC""                
+else                                                                                    
+echo -e "       CRON             : Service is "$red"not running (Error)"$NC""      
+fi
+echo -e "\e[94m    ------------------------------------------------------"
 echo ""
 read -p "Click enter to return to the main menu..."
 clear
 menu
 ;;
 10)
+#!/bin/bash
+
+RED="\033[0;32m"
+GREEN="\033[0;32m"
+NC="\e[0m"
 clear
-info
+
+echo ""
+echo -e "${RED}==============================================================$NC"
+echo -e "${RED} ------------------------------------------------------------$NC" 
+echo "   >>> Service & Port"
+echo "   - Nginx                   : 81"
+echo "   - XRAY Vmess TLS          : 443"
+echo "   - XRAY Vmess Non TLS      : 80"
+echo "   - XRAY Vmess GRPC         : 443"
+echo "   - XRAY Vless TLS          : 443"
+echo "   - XRAY Vless Non TLS      : 80"
+echo "   - XRAY Vless GRPC         : 443"
+echo "   - Trojan TCP TLS          : 443"
+echo "   - Trojan GRPC             : 443"
+echo "   - Trojan WS               : 443"
+echo "   - Shadowsocks WS TLS      : 443"
+echo "   - Shadowsocks GRPC        : 443"
+echo ""  | tee -a log-install.txt
+echo "   >>> Server Information & Other Features"
+echo "   - Timezone                : Asia/Jakarta (GMT +7)"
+echo "   - Fail2Ban                : [ON]"
+echo "   - Dflate                  : [ON]"
+echo "   - IPtables                : [ON]"
+echo "   - Auto-Reboot             : [ON]"
+echo "   - IPv6                    : [OFF]"
+echo "   - Autoreboot On           : 05:00 WIB GMT +7"
+echo "   - Auto Delete Expired Account"
+echo "   - Fully automatic script"
+echo "   - VPS settings"
+echo "   - Admin Control"
+echo "   - Full Orders For Various Services"
+echo -e "${RED} ------------------------------------------------------------$NC"
+echo -e "${RED}==============================================================$NC"
 echo ""
 read -p "Click enter to return to the main menu..."
 clear
