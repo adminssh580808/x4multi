@@ -289,13 +289,13 @@ END
     cd /usr/bin
     wget -q -O menu "${SCRIPT_URL}/menu.sh"
     chmod +x menu
-    wget -q -O menu-ss "${SCRIPT_URL}/menu-ss.sh"
+    wget -q -O menu-ss "${SCRIPT_URL}/ss.sh"
     chmod +x menu-ss
-    wget -q -O menu-tr "${SCRIPT_URL}/menu-tr.sh"
+    wget -q -O menu-tr "${SCRIPT_URL}/tr.sh"
     chmod +x menu-tr
-    wget -q -O menu-vl "${SCRIPT_URL}/menu-vl.sh"
+    wget -q -O menu-vl "${SCRIPT_URL}/vl.sh"
     chmod +x menu-vl
-    wget -q -O menu-vm "${SCRIPT_URL}/menu-vm.sh"
+    wget -q -O menu-vm "${SCRIPT_URL}/vm.sh"
     chmod +x menu-vm
     wget -q -O speedtest "${SCRIPT_URL}/speedtest_cli.py"
     chmod +x speedtest
