@@ -24,7 +24,22 @@ function import_string() {
     export WARNING="${RED}\e[5m"
     export UNDERLINE="\e[4m"
 }
+echo -e " ${GREEN}Checking IP to Access This Script${NC}"
+sleep 1
+MYIP=$(wget -qO- ipv4.icanhazip.com);
+wget -q -O PREMI "${SCRIPT_URL}/akses"
+if ! grep -w -q $MYIP PREMI; then
+	echo "Maaf, hanya IP yang terdaftar yang bisa menggunakan script ini!"
+	echo "Jika Berminat menggunakan Auto Script Premium ini silahkan hubungi admin :)"
+	rm /root/PREMI
+	rm setup.sh
+	rm -f /root/PREMI
+	exit
+fi
 
+clear
+echo -e "${GRENN}Proses instalasi script dimulai.....${NC}"
+sleep 1
 function check_root() {
     if [[ $(whoami) != 'root' ]]; then
         clear
@@ -83,7 +98,7 @@ function install_requirement() {
     /root/.acme.sh/acme.sh --register-account -m tambarin45@gmail.com
     /root/.acme.sh/acme.sh --issue -d $hostname --standalone -k ec-256 -ak ec-256
 
-    # Menyetting waktu menjadi waktu WIB
+    # // Menyetting waktu menjadi waktu WIB
     ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
     # // Install nginx
