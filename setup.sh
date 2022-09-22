@@ -1,6 +1,6 @@
 #!/bin/bash
-# VPN Server Auto Script
-# ===================================
+
+clear
 
 function import_string() {
     export SCRIPT_URL='https://raw.githubusercontent.com/adminssh580808/JKW/main'
@@ -46,37 +46,36 @@ function check_architecture() {
 }
 
 function install_requirement() {
-    #wget ${SCRIPT_URL}/cf.sh && chmod +x cf.sh && ./cf.sh
     read -rp "Input ur domain : " -e hostname
-    # Membuat Folder untuk menyimpan data utama
+    # // Membuat Folder untuk menyimpan data utama
     mkdir -p /etc/xray/
     mkdir -p /etc/xray/core/
     mkdir -p /etc/xray/log/
     mkdir -p /etc/xray/config/
     echo "$hostname" >/etc/xray/domain.conf
 
-    # Mengupdate repo dan hapus program yang tidak dibutuhkan
+    # // Mengupdate repo dan hapus program yang tidak dibutuhkan
     apt update -y
     apt upgrade -y
     apt dist-upgrade -y
     apt autoremove -y
     apt clean -y
 
-    #  Menghapus apache2 nginx sendmail ufw firewall dan exim4 untuk menghindari port nabrak
+    # // Menghapus apache2 nginx sendmail ufw firewall dan exim4 untuk menghindari port nabrak
     apt remove --purge nginx apache2 sendmail ufw firewalld exim4 -y >/dev/null 2>&1
     apt autoremove -y
     apt clean -y
 
-    # Menginstall paket yang di butuhkan
+    # // Menginstall paket yang di butuhkan
     apt install build-essential apt-transport-https -y
     apt install zip unzip nano net-tools make git lsof wget curl jq bc gcc make cmake neofetch htop libssl-dev socat sed zlib1g-dev libsqlite3-dev libpcre3 libpcre3-dev libgd-dev -y
 	apt-get install uuid-runtime
 
-    # Menghentikan Port 443 & 80 jika berjalan
+    # // Menghentikan Port 443 & 80 jika berjalan
     lsof -t -i tcp:80 -s tcp:listen | xargs kill >/dev/null 2>&1
     lsof -t -i tcp:443 -s tcp:listen | xargs kill >/dev/null 2>&1
 
-    # Membuat sertifikat letsencrypt untuk xray
+    # // Membuat sertifikat letsencrypt untuk xray
     rm -rf /root/.acme.sh
     mkdir -p /root/.acme.sh
     wget -q -O /root/.acme.sh/acme.sh "${SCRIPT_URL}/acme.sh"
@@ -87,7 +86,7 @@ function install_requirement() {
     # Menyetting waktu menjadi waktu WIB
     ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-    # Install nginx
+    # // Install nginx
     apt-get install libpcre3 libpcre3-dev zlib1g-dev dbus -y
     echo "deb http://nginx.org/packages/mainline/debian $(lsb_release -cs) nginx" |
         sudo tee /etc/apt/sources.list.d/nginx.list
@@ -218,7 +217,7 @@ END
     " >/home/vps/public_html/index.html
     systemctl start nginx
 
-    # Install Vnstat
+    # // Install Vnstat
     NET=$(ip -o $ANU -4 route show to default | awk '{print $5}')
     apt -y install vnstat
     /etc/init.d/vnstat restart
@@ -236,7 +235,7 @@ END
     rm -f /root/vnstat-2.9.tar.gz
     rm -rf /root/vnstat-2.9
 
-    # Install Xray
+    # // Install Xray
     wget --inet4-only -O /etc/xray/core/xray.zip "${SCRIPT_URL}/xray.zip"
     cd /etc/xray/core/
     unzip -o xray.zip
@@ -280,7 +279,9 @@ END
     # // Download welcome
     rm -f /root/.bashrc
     echo "clear" >>/root/.bashrc
-    echo "/root/.bashrc
+    echo "neofetch" >>/root/.bashrc
+    read -p "Enter To acces Panel Menu" >>/root/.bashrc
+    echo "menu" >> /root/.bashrc
 
     # // Install python2
     apt install python2 -y >/dev/null 2>&1
