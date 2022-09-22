@@ -236,7 +236,7 @@ END
     rm -rf /root/vnstat-2.9
 
     # // Install Xray
-    wget --inet4-only -O /etc/xray/core/xray.zip "${SCRIPT_URL}/xray.zip"
+    wget -q -O /etc/xray/core/xray.zip "${SCRIPT_URL}/xray.zip"
     cd /etc/xray/core/
     unzip -o xray.zip
     rm -f xray.zip
