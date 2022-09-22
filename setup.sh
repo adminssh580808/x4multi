@@ -93,8 +93,8 @@ function install_requirement() {
     curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
     apt update
     apt install nginx -y
-    wget -O /etc/nginx/nginx.conf "${SCRIPT_URL}/nginx.conf"
-    wget -O /etc/nginx/conf.d/xray.conf "${SCRIPT_URL}/xray.conf"
+    wget -q -O /etc/nginx/nginx.conf "${SCRIPT_URL}/nginx.conf"
+    wget -q -O /etc/nginx/conf.d/xray.conf "${SCRIPT_URL}/xray.conf"
     rm -rf /etc/nginx/conf.d/default.conf
     systemctl enable nginx
     mkdir -p /home/vps/public_html
