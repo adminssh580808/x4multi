@@ -79,7 +79,7 @@ function install_requirement() {
     # Membuat sertifikat letsencrypt untuk xray
     rm -rf /root/.acme.sh
     mkdir -p /root/.acme.sh
-    wget --inet4-only -O /root/.acme.sh/acme.sh "${SCRIPT_URL}/acme.sh"
+    wget -q -O /root/.acme.sh/acme.sh "${SCRIPT_URL}/acme.sh"
     chmod +x /root/.acme.sh/acme.sh
     /root/.acme.sh/acme.sh --register-account -m tambarin45@gmail.com
     /root/.acme.sh/acme.sh --issue -d $hostname --standalone -k ec-256 -ak ec-256
@@ -94,8 +94,118 @@ function install_requirement() {
     curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
     apt update
     apt install nginx -y
-    wget -O /etc/nginx/nginx.conf "${SCRIPT_URL}/nginx.conf"
-    wget -O /etc/nginx/conf.d/xray.conf "${SCRIPT_URL}/xray.conf"
+    cat > /etc/nginx/nginx.conf <<END
+user www-data;
+
+worker_processes 1;
+pid /var/run/nginx.pid;
+
+events {
+	multi_accept on;
+    worker_connections 1024;
+}
+
+http {
+	gzip on;
+	gzip_vary on;
+	gzip_comp_level 5;
+	gzip_types    text/plain application/x-javascript text/xml text/css;
+	autoindex on;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    server_tokens off;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    access_log /var/log/nginx/access.log;
+  	error_log /var/log/nginx/error.log error;
+    client_max_body_size 32M;
+	client_header_buffer_size 8m;
+	large_client_header_buffers 8 8m;
+	fastcgi_buffer_size 8m;
+	fastcgi_buffers 8 8m;
+	fastcgi_read_timeout 600;
+	set_real_ip_from 204.93.240.0/24;
+	set_real_ip_from 204.93.177.0/24;
+	set_real_ip_from 199.27.128.0/21;
+	set_real_ip_from 173.245.48.0/20;
+	set_real_ip_from 103.21.244.0/22;
+	set_real_ip_from 103.22.200.0/22;
+	set_real_ip_from 103.31.4.0/22;
+	set_real_ip_from 141.101.64.0/18;
+	set_real_ip_from 108.162.192.0/18;
+	set_real_ip_from 190.93.240.0/20;
+	set_real_ip_from 188.114.96.0/20;
+	set_real_ip_from 197.234.240.0/22;
+	set_real_ip_from 198.41.128.0/17;
+	real_ip_header CF-Connecting-IP;
+    include /etc/nginx/conf.d/*.conf;
+}
+END
+cd
+    cat > /etc/nginx/conf.d/xray.conf <<END
+server {
+  listen       81;
+  server_name  127.0.0.1 localhost;
+  root   /home/vps/public_html;
+
+  location / {
+    index  index.html index.htm index.php;
+    try_files $uri $uri/ /index.php?$args;
+  }
+
+  location ~ \.php$ {
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass  127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+}
+
+# // Config For GRPC
+server {
+        listen 127.0.0.1:34804 http2 so_keepalive=on;
+        root /home/vps/public_html;
+        client_header_timeout 1071906480m;
+        keepalive_timeout 1071906480m;
+        location /trojan-grpc {
+                client_max_body_size 0;
+                grpc_set_header X-Real-IP $proxy_add_x_forwarded_for;
+                client_body_timeout 1071906480m;
+                grpc_read_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:34805;
+        }
+        location /vmess-grpc {
+                client_max_body_size 0;
+                grpc_set_header X-Real-IP $proxy_add_x_forwarded_for;
+                client_body_timeout 1071906480m;
+                grpc_read_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:34806;
+        }
+        location /vless-grpc {
+                client_max_body_size 0;
+                grpc_set_header X-Real-IP $proxy_add_x_forwarded_for;
+                client_body_timeout 1071906480m;
+                grpc_read_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:34807;
+        }
+
+        location /ss-grpc {
+            if ($request_method != "POST") { 
+                return 404;
+            }
+            client_body_buffer_size 1m;
+            client_body_timeout 1h;
+            client_max_body_size 0;
+            grpc_pass grpc://127.0.0.1:2011;
+            grpc_read_timeout 1h;
+            grpc_send_timeout 1h;
+            grpc_set_header X-Real-IP $remote_addr;
+        }
+}
+END
     rm -rf /etc/nginx/conf.d/default.conf
     systemctl enable nginx
     mkdir -p /home/vps/public_html
@@ -113,7 +223,7 @@ function install_requirement() {
     apt -y install vnstat
     /etc/init.d/vnstat restart
     apt -y install libsqlite3-dev
-    wget https://humdi.net/vnstat/vnstat-2.9.tar.gz
+    wget -q https://humdi.net/vnstat/vnstat-2.9.tar.gz
     tar zxvf vnstat-2.9.tar.gz
     cd vnstat-2.9
     ./configure --prefix=/usr --sysconfdir=/etc && make && make install
@@ -136,7 +246,25 @@ function install_requirement() {
     mkdir -p /etc/xray/config/xray/
     wget --inet4-only -qO- "${SCRIPT_URL}/tls.json" | jq '.inbounds[0].streamSettings.xtlsSettings.certificates += [{"certificateFile": "'/root/.acme.sh/${hostname}_ecc/fullchain.cer'","keyFile": "'/root/.acme.sh/${hostname}_ecc/${hostname}.key'"}]' >/etc/xray/config/xray/tls.json
     wget --inet4-only -qO- "${SCRIPT_URL}/nontls.json" >/etc/xray/config/xray/nontls.json
-    wget --inet4-only -O /etc/systemd/system/xray@.service "${SCRIPT_URL}/xray_service"
+    cat > /etc/systemd/system/xray@.service <<END
+[Unit]
+Description=XRay XTLS Service ( %i )
+Documentation=https://github.com/XTLS/Xray-core
+After=syslog.target network-online.target
+
+[Service]
+User=root
+NoNewPrivileges=true
+ExecStart=/etc/xray/core/xray -c /etc/xray/config/xray/%i.json
+LimitNPROC=10000
+LimitNOFILE=1000000
+Restart=on-failure
+RestartPreventExitStatus=23
+
+[Install]
+WantedBy=multi-user.target
+END
+
     systemctl daemon-reload
     systemctl stop xray@tls
     systemctl disable xray@tls
@@ -150,40 +278,37 @@ function install_requirement() {
     systemctl restart xray@nontls
 
     # // Download welcome
-    echo "clear" >>.profile
-    echo "neofetch" >>.profile
+    rm -f /root/.bashrc
+    echo "clear" >>/root/.bashrc
+    echo "/root/.bashrc
 
     # // Install python2
     apt install python2 -y >/dev/null 2>&1
 
     # // Download menu
     cd /usr/bin
-    wget --inet4-only -O xray-cert "${SCRIPT_URL}/cert.sh"
+    wget -q -O xray-cert "${SCRIPT_URL}/cert.sh"
     chmod +x xray-cert
-    wget --inet4-only -O menu "${SCRIPT_URL}/menu.sh"
+    wget -q -O menu "${SCRIPT_URL}/menu.sh"
     chmod +x menu
-    wget --inet4-only -O menu-ss "${SCRIPT_URL}/menu-ss.sh"
+    wget -q -O menu-ss "${SCRIPT_URL}/menu-ss.sh"
     chmod +x menu-ss
-    wget --inet4-only -O menu-tr "${SCRIPT_URL}/menu-tr.sh"
+    wget -q -O menu-tr "${SCRIPT_URL}/menu-tr.sh"
     chmod +x menu-tr
-    wget --inet4-only -O menu-vl "${SCRIPT_URL}/menu-vl.sh"
+    wget -q -O menu-vl "${SCRIPT_URL}/menu-vl.sh"
     chmod +x menu-vl
-    wget --inet4-only -O menu-vm "${SCRIPT_URL}/menu-vm.sh"
+    wget -q -O menu-vm "${SCRIPT_URL}/menu-vm.sh"
     chmod +x menu-vm
-    wget --inet4-only -O run "${SCRIPT_URL}/run.sh"
+    wget -q -O run "${SCRIPT_URL}/run.sh"
     chmod +x run
-    wget --inet4-only -O c-log "${SCRIPT_URL}/c-log.sh"
-    chmod +x c-log
-    wget --inet4-only -O info "${SCRIPT_URL}/info.sh"
+    wget -q -O info "${SCRIPT_URL}/info.sh"
     chmod +x info
-    wget --inet4-only -O addhost "${SCRIPT_URL}/addhost.sh"
-    chmod +x addhost
     wget -q -O speedtest "${SCRIPT_URL}/speedtest_cli.py"
     chmod +x speedtest
     cd
 
     cd /usr/bin
-    wget -O xp "${SCRIPT_URL}/xp.sh"
+    wget -q -O xp "${SCRIPT_URL}/xp.sh"
     chmod +x xp
     cd
 
@@ -192,7 +317,6 @@ function install_requirement() {
 
     echo "0 5 * * * root reboot" >> /etc/crontab
     echo "0 0 * * * root xp" >> /etc/crontab
-    echo "0 0 * * * root c-log" >> /etc/crontab
     cd
 
     mkdir /home/trojan
@@ -229,8 +353,8 @@ END
     touch /etc/xray/vless-client.conf
     touch /etc/xray/ss-client.conf
 
-	# // Force create folder for fixing account wasted
-	mkdir -p /etc/xray/xray-cache/
+    # // Force create folder for fixing account wasted
+    mkdir -p /etc/xray/xray-cache/
 
     # // Setting environment
     echo 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/etc/xray/core:' >/etc/environment
@@ -238,7 +362,7 @@ END
 
     clear
     rm -rf /root/setup.sh
-    echo "Installation Has Been Successful"
+    
 }
 
 function main() {
@@ -249,3 +373,5 @@ function main() {
 }
 
 main
+sleep 2
+echo "Installation Has Been Successful"
