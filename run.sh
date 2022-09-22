@@ -7,7 +7,7 @@ clear
 echo ""
 echo -e "\e[94m    .----------------------------------------------------.    "
 echo -e "\e[94m    |              DISPLAYING RUNNING SYSTEM             |    "
-echo -e "\e[94m    '----------------------------------------------------'    "
+echo -e "\e[94m    '----------------------------------------------------'    $NC"
 status="$(systemctl show xray@tls.service --no-page)"                                   
 status_text=$(echo "${status}" | grep 'ActiveState=' | cut -f2 -d=)                     
 if [ "${status_text}" == "active" ]                                                     
